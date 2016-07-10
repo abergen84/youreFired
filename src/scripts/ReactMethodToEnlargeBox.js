@@ -11,13 +11,13 @@ const CalendarView = React.createClass({
 	},
 
 	componentWillMount: function(){
-		// var self = this
-		// Backbone.Events.on('chooseDay', function(day){
-		// 	self.setState({
-		// 		currentday: day
-		// 	})
-		// })
-		// console.log("setting the day:", this.state)
+		var self = this
+		Backbone.Events.on('chooseDay', function(day){
+			self.setState({
+				currentday: day
+			})
+		})
+		console.log("setting the day:", this.state)
 	},
 
 	render: function(){
@@ -25,7 +25,7 @@ const CalendarView = React.createClass({
 		return (
 			<div id="mainContainer">
 				<Header />
-				<CalendarContainer calColl={this.props.calColl} />
+				<CalendarContainer dayId={this.state.currentday} calColl={this.props.calColl} />
 			</div>
 			)
 	}
@@ -45,13 +45,11 @@ const Header = React.createClass({
 const CalendarContainer = React.createClass({
 	
 	_populateCalendar: function(array){
-		var calendarData = {}
+		// var my_array = 
 		for(var i = 1; i < 32; i++){
-			calendarData[i] = array
-			// array.push(<Days dayId={this.props.dayId} day={i}  />)
+			array.push(<Days dayId={this.props.dayId} day={i} />)
 		}
-		console.log(calendarData)
-		return calendarData
+		return array
 	},
 
 	render: function(){
@@ -68,18 +66,18 @@ const Days = React.createClass({
 	
 	_handleClick: function(){
 		console.log("click", this.props)
-		location.hash = `day/${this.props.day}`
-		// Backbone.Events.trigger('chooseDay', this.props.day)
+		// location.hash = `day/${this.props.day}`
+		Backbone.Events.trigger('chooseDay', this.props.day)
 	},
 
 	render: function(){
 		// console.log(this)
-		// var active = "days"
-		// if(this.props.dayId === this.props.day){
-		// 	active = "days active"
-		// }
+		var active = "days"
+		if(this.props.dayId === this.props.day){
+			active = "days active"
+		}
 		return (
-			<div className="days" id={this.props.day} onClick={this._handleClick}>
+			<div className={active} id={this.props.day} onClick={this._handleClick}>
 				<p>{this.props.day}</p>
 			</div>
 		)
